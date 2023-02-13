@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 sports_factory.access_sports_factory,access_sports_factory,sports_factory.model_sports_factory,base.group_user,1,1,1,1
 sports_factory.access_sports_factory_category,access_sports_factory_category,sports_factory.model_sports_factory_category,base.group_user,1,1,1,1
 sports_factory.access_sports_factory_customer,access_sports_factory_customer,sports_factory.model_sports_factory_customer,base.group_user,1,1,1,1
+sports_factory.access_sports_factory_brands,access_sports_factory_brands,sports_factory.model_sports_factory_brands,base.group_user,1,1,1,1

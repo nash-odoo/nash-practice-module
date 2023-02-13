@@ -1,13 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<record id="sports_brands_action" model="ir.actions.act_window">
-		<field name="name">Companies</field>
+	<record id="sports_product_action" model="ir.actions.act_window">
+		<field name="name">Products</field>
 		<field name="res_model">sports.factory</field>
 		<field name="view_mode">tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
-				There is no Comapnies, please add some !!
+				There is no Products, please add some !!
 			</p>
+		</field>
+	</record>
+
+	<!-- List View -->
+	<record id="sports_factory_view_tree" model="ir.ui.view">
+		<field name="name">sports.factory.tree</field>
+		<field name="model">sports.factory</field>
+		<field name="arch" type="xml">
+			<tree string="List_View">
+				<field name="name"/>
+				<field name="description"/>
+				<field name="sports_type"/>
+				<field name="brand_type"/>
+				<field name="size"/>
+				<field name="material"/>
+				<field name="colour"/>
+				<field name="age_range" optional="show"/>
+				<field name="weight" string="Weight(gm)"/>
+				<field name="outer_material" optional="hide"/>
+				<!-- <field name="product_image"/> -->
+				<field name="price"/>
+			</tree>
+		</field>
+	</record>
+
+		<!-- Form View -->
+	<record id="sports_factory_view_form" model="ir.ui.view">
+		<field name="name">sports.factory.form</field>
+		<field name="model">sports.factory</field>
+		<field name="arch" type="xml">
+			<form string="Form_View">
+				<!-- <header>
+					<field name="state" widget="statusbar" options="{'clickable':'1'}"/>
+				</header> -->
+				<sheet>
+					<div>
+						<label for="name" string="Product Name"/>
+						<h1>
+							<field name="name"/>
+						</h1>
+					</div>
+					<br>
+					</br>
+					<group>
+						<group>
+							<field name="sports_type"/>
+							<field name="brand_type"/>
+						</group>
+						<group>
+							<field name="product_image" widget="image" nolabel="1"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Description">
+							<group>
+								<group><field name="description"/></group>
+								<group><field name="size"/></group>
+								<group><field name="material"/></group>
+								<group><field name="colour"/></group>
+								<group><field name="age_range"/></group>
+								<group><field name="weight"/></group>
+								<group><field name="outer_material"/></group>
+								<group><field name="price"/></group>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<!-- Search View -->
+	<record id="sports_factory_view_search" model="ir.ui.view">
+		<field name="name">sports.factory.search</field>
+		<field name="model">sports.factory</field>
+		<field name="arch" type="xml">
+			<search string="Search_View">
+				<field name="name"/>
+				<field name="sports_type"/>
+				<field name="brand_type"/>
+				<field name="description"/>
+				<field name="size"/>
+				<field name="material"/>
+				<field name="colour"/>
+				<field name="age_range"/>
+				<field name="weight"/>
+				<field name="outer_material"/>
+				<field name="price"/>
+			</search>
 		</field>
 	</record>
 </odoo>

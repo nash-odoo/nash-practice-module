@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="sports_brands_action" model="ir.actions.act_window">
+		<field name="name">Companies</field>
+		<field name="res_model">sports.factory.brands</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				There is no Comapnies, please add some !!
+			</p>
+		</field>
+	</record>
+</odoo>

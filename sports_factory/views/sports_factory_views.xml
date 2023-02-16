@@ -53,11 +53,13 @@
 					</br>
 					<group>
 						<group>
+							<field name="category_type"/>
 							<field name="sports_type"/>
 							<field name="brand_type"/>
 						</group>
 						<group>
-							<field name="product_image" widget="image" nolabel="1"/>
+							<field name="product_image" widget="image" options='{"priview_image": true}'
+							nolabel="1"/>
 						</group>
 					</group>
 					<notebook>
@@ -96,6 +98,11 @@
 				<field name="weight"/>
 				<field name="outer_material"/>
 				<field name="price"/>
+				<filter string="Colour : Black/Red" name="sports_type" 
+						domain="['|',('colour', '=', 'red'),('colour','=','black')]"/>
+				<group expand="1" string="Group By">
+					<filter string="Colour" name="colour" context="{'group_by':'colour'}"/>
+				</group>
 			</search>
 		</field>
 	</record>

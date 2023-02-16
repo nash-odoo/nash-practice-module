@@ -7,6 +7,7 @@
 		'views/sports_factory_brands_views.xml',
 		'views/sports_factory_category_views.xml',
 		'views/sports_factory_customer_views.xml',
+		'views/sports_factory_product_category_views.xml',
 		'views/sports_menus.xml'
 		],
 	'image':['static/description/ball.png'],

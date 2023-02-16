@@ -11,6 +11,7 @@ class SportsFactory(models.Model):
     name = fields.Char(required=True)
     description = fields.Text()
     product_image = fields.Binary()
+    category_type = fields.Many2one('sports.factory.product.category', string="category")
     sports_type = fields.Many2one('sports.factory.category', string='Sport')
     brand_type = fields.Many2one('sports.factory.brands', string='Brand')
     price = fields.Float()

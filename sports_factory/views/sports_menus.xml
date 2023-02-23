@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="sports_menu_root" name="Sports Factory" web_icon="sports_factory,static/description/ball.png">
+    <menuitem id="sports_menu_root" name="Sports Factory" web_icon="sports_factory,static/description/icon.png">
         <menuitem id="sports_first_level_menu" name="Product">
             <menuitem id="sports_product_model_menu_action" action="sports_product_action"/>
             <menuitem id="sports_products_category_action" action="sports_product_category_action"/>
+            <menuitem id="sports_products_customization" action="sports_product_customization_action"/>
         </menuitem>
 
         <menuitem id="sports_second_level_menu" name="Brands">
@@ -14,8 +15,8 @@
             <menuitem id="sports_type_model_menu_action" action="sports_category_action"/>
         </menuitem>
 
-        <menuitem id="sports_fourth_level_menu" name="Users">
+        <!-- <menuitem id="sports_fourth_level_menu" name="Users">
             <menuitem id="sports_customer_model_menu_action" action="sports_customer_action"/>
-        </menuitem>
+        </menuitem> -->
     </menuitem>
 </odoo>

@@ -16,19 +16,21 @@
 		<field name="name">sports.factory.tree</field>
 		<field name="model">sports.factory</field>
 		<field name="arch" type="xml">
-			<tree string="List_View">
+			<tree string="List_View" decoration-primary="price &gt; 2000">
 				<field name="name"/>
 				<field name="description"/>
 				<field name="sports_type"/>
 				<field name="brand_type"/>
-				<field name="size"/>
+				<field name="int_size"/>
+				<field name="char_size"/>
 				<field name="material"/>
 				<field name="colour"/>
-				<field name="age_range" optional="show"/>
-				<field name="weight" string="Weight(gm)"/>
+				<field name="age_range" optional="hide"/>
+				<field name="weight" string="Weight(gm)" optional="hide"/>
 				<field name="outer_material" optional="hide"/>
 				<!-- <field name="product_image"/> -->
 				<field name="price"/>
+				<field name="total_price"/>
 			</tree>
 		</field>
 	</record>
@@ -39,9 +41,10 @@
 		<field name="model">sports.factory</field>
 		<field name="arch" type="xml">
 			<form string="Form_View">
-				<!-- <header>
-					<field name="state" widget="statusbar" options="{'clickable':'1'}"/>
-				</header> -->
+				<header>
+					<field name="state" widget="statusbar" options="{'clickable':'1'}"
+						statusbar_visible="manufacturing,packaging,delivered"/>
+				</header>
 				<sheet>
 					<div>
 						<label for="name" string="Product Name"/>
@@ -53,8 +56,8 @@
 					</br>
 					<group>
 						<group>
-							<field name="category_type"/>
 							<field name="sports_type"/>
+							<field name="category_type" domain="[('sports_type','=',sports_type)]"/>
 							<field name="brand_type"/>
 						</group>
 						<group>
@@ -66,13 +69,23 @@
 						<page string="Description">
 							<group>
 								<group><field name="description"/></group>
-								<group><field name="size"/></group>
+								<group><field name="int_size" attrs="{'invisible':[('name','not in',['Bat','Shoes'])]}"/></group>
+								<group><field name="char_size" attrs="{'invisible':[('name','not in',['Helmet','Pads','Gloves','Goalkeeper Gloves'])]}"/></group>
 								<group><field name="material"/></group>
 								<group><field name="colour"/></group>
 								<group><field name="age_range"/></group>
 								<group><field name="weight"/></group>
 								<group><field name="outer_material"/></group>
 								<group><field name="price"/></group>
+								<group><field name="total_price"/></group>
+								<group><field name="state" invisible="1"/></group>
+							</group>
+						</page>
+						<page string="Customization">
+							<field name="customization_ids" string="Title" nolabel="1" attrs="{'readonly':[('state','in',['done'])]}"/>
+							<group>
+								<group><button name="action_done" string="Done" type="object" class="oe_highlight"/></group>
+								<group><field name="extra_cost" string="Extra Cost"/></group>
 							</group>
 						</page>
 					</notebook>
@@ -91,7 +104,8 @@
 				<field name="sports_type"/>
 				<field name="brand_type"/>
 				<field name="description"/>
-				<field name="size"/>
+				<field name="int_size"/>
+				<field name="char_size"/>
 				<field name="material"/>
 				<field name="colour"/>
 				<field name="age_range"/>

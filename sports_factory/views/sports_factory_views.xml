@@ -88,6 +88,19 @@
 								<group><field name="extra_cost" string="Extra Cost"/></group>
 							</group>
 						</page>
+						<page string="Offers">
+							<group>
+								<group>
+									<field name="offer_available"/>
+								</group>
+								<group>
+									<field name="five_percent_offer" attrs="{'invisible': [('offer_available', '=', False)]}" string="5% off"/>
+									<field name="ten_percent_offer" attrs="{'invisible': [('offer_available', '=', False)]}" string="10% off"/>
+									<field name="twenty_percent_offer" attrs="{'invisible': [('offer_available', '=', False)]}" string="20% off"/>
+									<field name="discounted_price" invisible="1"/>
+								</group>
+							</group>
+						</page>
 					</notebook>
 				</sheet>
 			</form>

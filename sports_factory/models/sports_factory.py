@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from dateutil.relativedelta import relativedelta
-from datetime import datetime
-
 
 class SportsFactory(models.Model):
     _name = "sports.factory"
@@ -17,11 +14,12 @@ class SportsFactory(models.Model):
     category_type = fields.Many2one('sports.factory.product.category', string="category")
     sports_type = fields.Many2one('sports.factory.category', string='Sport')
     brand_type = fields.Many2one('sports.factory.brands', string='Brand')
-    price = fields.Float(compute="_compute_discount")
+    base_price = fields.Float(compute="_compute_discount", readonly=False)
+    price = fields.Float()
     offer_available = fields.Boolean()
-    five_percent_offer = fields.Boolean(widget='radio')
-    ten_percent_offer = fields.Boolean(widget='radio')
-    twenty_percent_offer = fields.Boolean(widget='radio')
+    five_percent_offer = fields.Boolean()
+    ten_percent_offer = fields.Boolean()
+    twenty_percent_offer = fields.Boolean()
     discounted_price = fields.Float(readonly=True)
     int_size = fields.Selection(
         string="Size(Numbers)",
@@ -43,7 +41,7 @@ class SportsFactory(models.Model):
     age_range = fields.Selection(
         string="Age",
         selection=[('<18', '<18'), ('>=18', '>=18'), ('anyone', 'Anyone')])       
-    weight = fields.Float(readonly=True)
+    weight = fields.Float()
     outer_material = fields.Selection(
         string="Outer Material",
         selection=[('polypropylene', 'Polypropylene'),
@@ -51,34 +49,41 @@ class SportsFactory(models.Model):
     customization_ids = fields.Many2many('sports.factory.customization')
     extra_cost = fields.Integer(compute="_compute_extra_cost")
     state = fields.Selection(
-        selection=[('manufacturing','Manufacturing'),('packaging','Packaging'),
-        ('delivered','Delivered'),('done','Done')])
+        selection=[('in stock','IN STOCK'),('out of stock','OUT OF STOCK'),('done','Done')],
+        default='in stock')
     total_price = fields.Integer(readonly=True)
+    state_group_id = fields.Many2one('sports.factory.delivery')
+    states_id = fields.Many2many('res.country.state',compute="_compute_state_id")
+    # state_id = fields.Many2one('res.country.state',string="State",domain="[('id', 'in', states_id)]")
+    delivery_time = fields.Char(related="state_group_id.delivery")
 
     def action_done(self):
         self.state = "done"
 
-    @api.depends("price","five_percent_offer","ten_percent_offer","twenty_percent_offer")
+    @api.depends("price","offer_available","five_percent_offer","ten_percent_offer","twenty_percent_offer")
     def _compute_discount(self):
         for record in self:
-            breakpoint()
-            if record.offer_available and record.price>0:
+            # breakpoint()
+            if record.offer_available:
                 if record.five_percent_offer:
-                    record.price = record.price * 0.95
+                    record.base_price = record.price + 5
                     # record.discounted_price = record.price * 0.5
                     # record.price = record.price - record.discounted_price
                 elif record.ten_percent_offer:
-                    record.price = record.price * 0.90
+                    record.base_price = record.price + 10
                     # record.discounted_price = record.price * 0.10
                     # record.price = record.price - record.discounted_price
                 elif record.twenty_percent_offer:
-                    record.price = record.price * 0.80
+                    record.base_price = record.price + 20
                     # record.discounted_price = record.price * 0.20
                     # record.price = record.price - record.discounted_price
+                else:
+                    record.base_price = record.price + 100
             else:
-                pass
+                # breakpoint()
+                record.price = record.price + 1
 
-    @api.depends("customization_ids")
+    @api.depends("price","customization_ids")
     def _compute_extra_cost(self):
         for record in self:
             if record.customization_ids:
@@ -87,3 +92,8 @@ class SportsFactory(models.Model):
             else:
                 record.total_price = record.price
                 record.extra_cost = 0
+
+    @api.depends('state_group_id')
+    def _compute_state_id(self):
+        for record in self:
+            record.states_id = record.state_group_id.mapped('states_id')

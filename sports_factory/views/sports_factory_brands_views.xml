@@ -10,4 +10,32 @@
 			</p>
 		</field>
 	</record>
+
+	<!-- Form View -->
+    <record id="sports_factory_brands_view_form" model="ir.ui.view">
+        <field name="name">sports.factory.brands.form</field>
+        <field name="model">sports.factory.brands</field>
+        <field name="arch" type="xml">
+            <form string="Form_View">
+                <sheet>
+                    <div>
+                        <h1>
+                            <field name="name" nolabel="1"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page string="Products">
+                            <field name="product_ids" nolabel="1">
+                                <tree string="Line" editable="bottom">
+                                    <field name="name" string="Title"/>
+                                    <field name="sports_type"/>
+                                    <field name="price"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>    
+                </sheet>
+            </form>
+        </field>
+    </record>
 </odoo>

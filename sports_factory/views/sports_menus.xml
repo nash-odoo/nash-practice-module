@@ -5,6 +5,7 @@
             <menuitem id="sports_product_model_menu_action" action="sports_product_action"/>
             <menuitem id="sports_products_category_action" action="sports_product_category_action"/>
             <menuitem id="sports_products_customization" action="sports_product_customization_action"/>
+            <menuitem id="sports_factory_delivery" action="sports_factory_delivery_action"/>
         </menuitem>
 
         <menuitem id="sports_second_level_menu" name="Brands">

@@ -1,1 +1,1 @@
-from . import sports_factory, sports_factory_category, sports_factory_brands, sports_factory_product_category, sports_factory_customization, sports_factory_delivery
+from . import  product_template, sports_factory_category, sports_factory_brands, sports_factory_product_category, sports_factory_customization, sports_factory_delivery

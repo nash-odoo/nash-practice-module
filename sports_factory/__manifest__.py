@@ -1,7 +1,7 @@
 # -- coding: utf-8 --
 {
 	'name': "Sports Factory",
-	'depends': ['base',],
+	'depends': ['base','website_sale'],
 	'data':['security/ir.model.access.csv',
 		'views/sports_factory_views.xml',
 		'views/sports_factory_brands_views.xml',

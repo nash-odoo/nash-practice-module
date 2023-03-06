@@ -2,8 +2,8 @@
 <odoo>
 	<record id="sports_product_action" model="ir.actions.act_window">
 		<field name="name">Products</field>
-		<field name="res_model">sports.factory</field>
-		<field name="view_mode">tree,form</field>
+		<field name="res_model">product.template</field>
+		<field name="view_mode">kanban,tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				There is no Products, please add some !!
@@ -14,8 +14,9 @@
 	<!-- List View -->
 	<record id="sports_factory_view_tree" model="ir.ui.view">
 		<field name="name">sports.factory.tree</field>
-		<field name="model">sports.factory</field>
+		<field name="model">product.template</field>
 		<field name="arch" type="xml">
+		<xpath expr="//list" position="replace">
 			<tree string="List_View" decoration-info="price &gt; 2000">
 				<field name="name"/>
 				<field name="description"/>
@@ -32,13 +33,14 @@
 				<field name="price"/>
 				<field name="total_price"/>
 			</tree>
+		</xpath>
 		</field>
 	</record>
 
 		<!-- Form View -->
 	<record id="sports_factory_view_form" model="ir.ui.view">
 		<field name="name">sports.factory.form</field>
-		<field name="model">sports.factory</field>
+		<field name="model">product.template</field>
 		<field name="arch" type="xml">
 			<form string="Form_View">
 				<header>
@@ -63,24 +65,31 @@
 							<field name="brand_type"/>
 						</group>
 						<group>
-							<field name="product_image" widget="image" options='{"priview_image": true}'
-							nolabel="1"/>
+							<field name="product_image" widget="image" nolabel="1"/>
 						</group>
 					</group>
 					<notebook>
 						<page string="Description">
-							<group>
-								<group><field name="description"/></group>
-								<group><field name="int_size" attrs="{'invisible':[('name','not in',['Bat','Shoes'])]}"/></group>
-								<group><field name="char_size" attrs="{'invisible':[('name','not in',['Helmet','Pads','Gloves','Goalkeeper Gloves'])]}"/></group>
-								<group><field name="material"/></group>
-								<group><field name="colour"/></group>
-								<group><field name="age_range"/></group>
-								<group><field name="weight" string="Weight(gm)"/></group>
-								<group><field name="outer_material"/></group>
-								<group><field name="price"/></group>
-								<group><field name="total_price"/></group>
-								<group><field name="state" invisible="1"/></group>
+							<group col='3'>
+								<group>
+									<field name="description"/>
+									<field name="countable" string="Size(countable)"/>
+									<field name="int_size" attrs="{'invisible':[('countable','=',False)]}"/>
+									<field name="char_size" attrs="{'invisible':[('countable','=',True)]}"/>
+									<field name="material"/>
+								</group>
+								<group>
+									<field name="colour"/>
+									<field name="age_range"/>
+									<field name="weight" string="Weight(gm)"/>
+									<field name="outer_material"/>
+								</group>
+								<group>		
+									<field name="price"/>
+									<field name="total_price"/>
+									<field name="state" invisible="1"/>
+									<button name="action_publish" string="Publish" type="object" class="oe_highlight"/>
+								</group>
 							</group>
 						</page>
 						<page string="Customization">
@@ -96,10 +105,8 @@
 									<field name="offer_available"/>
 								</group>
 								<group  attrs="{'invisible': [('offer_available', '=', False)]}" >
-									<field name="five_percent_offer" string="5% off"/>
-									<field name="ten_percent_offer" string="10% off"/>
-									<field name="twenty_percent_offer" string="20% off"/>
-									<field name="discounted_price" invisible="1"/>
+									<field name="offers" widget='radio'/>
+									<field name="base_price"/>
 								</group>
 							</group>
 						</page>
@@ -120,7 +127,7 @@
 	<!-- Search View -->
 	<record id="sports_factory_view_search" model="ir.ui.view">
 		<field name="name">sports.factory.search</field>
-		<field name="model">sports.factory</field>
+		<field name="model">product.template</field>
 		<field name="arch" type="xml">
 			<search string="Search_View">
 				<field name="name"/>
@@ -141,6 +148,123 @@
 					<filter string="Colour" name="colour" context="{'group_by':'colour'}"/>
 				</group>
 			</search>
+		</field>
+	</record>
+	<!-- Kanabn View -->
+	<record id="sports_factory_kanban_view" model="ir.ui.view">
+		<field name="name">sports.factory.kanban</field>
+		<field name="model">product.template</field>
+		<field name="arch" type="xml">
+			<kanban string="kanban_view" default_group_by="sports_type"
+                records_draggable="false">
+			<!-- <field name="state"/> -->
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                        <div class="oe_kanban_details">
+                        	<!-- <div class="oe_kanban_image">
+                            	<img t-att-src="'/web/image/' + record.sports.factory + '/' + record.id + '/image_small'" style="max-height: 50px;"/>
+                        	</div> -->
+                            <h4 class="oe_kanban_title">
+                                <field name="name"/>
+                            </h4>
+                            <div class="col-10">
+                                <field name="description"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+			</kanban>
+		</field>
+	</record>
+	<!-- Inherit View -->
+	<record id="sports_product_inherit_view_form" model="ir.ui.view">
+		<field name="name">sports.product.inherit.form</field>
+		<field name="model">product.template</field>
+		<field name="inherit_id" ref="product.product_template_only_form_view"/>
+		<field name="arch" type="xml">
+			<xpath expr="//form" position="replace">
+				<form string="Inherit_Form_View">
+					<header>
+						<field name="state" widget="statusbar" options="{'clickable':'1'}"
+							statusbar_visible="in stock,out of stock"/>
+					</header>
+					<sheet>
+						<widget name="web_ribbon" title="In Stock" bg_color="bg-success" states="in stock"/>
+						<widget name="web_ribbon" title="Out Of Stock" bg_color="bg-danger" states="out of stock"/>
+						<div>
+							<label for="name" string="Product Name"/>
+							<h1>
+								<field name="name"/>
+							</h1>
+						</div>
+						<br>
+						</br>
+						<group>
+							<group>
+								<field name="sports_type"/>
+								<field name="category_type" domain="[('sports_type','=',sports_type)]"/>
+								<field name="brand_type"/>
+							</group>
+							<group>
+								<field name="product_image" widget="image" nolabel="1"/>
+							</group>
+						</group>
+						<notebook>
+							<page string="Description">
+								<group col='3'>
+									<group>
+										<field name="description"/>
+										<field name="countable" string="Size(countable)"/>
+										<field name="int_size" attrs="{'invisible':[('countable','=',False)]}"/>
+										<field name="char_size" attrs="{'invisible':[('countable','=',True)]}"/>
+										<field name="material"/>
+									</group>
+									<group>
+										<field name="colour"/>
+										<field name="age_range"/>
+										<field name="weight" string="Weight(gm)"/>
+										<field name="outer_material"/>
+									</group>
+									<group>		
+										<field name="price"/>
+										<field name="total_price"/>
+										<field name="state" invisible="1"/>
+										<button name="action_publish" string="Publish" type="object" class="oe_highlight"/>
+									</group>
+								</group>
+							</page>
+							<page string="Customization">
+								<field name="customization_ids" string="Title" nolabel="1" attrs="{'readonly':[('state','in',['done'])]}"/>
+								<group>
+									<group><button name="action_done" string="Done" type="object" class="oe_highlight"/></group>
+									<group><field name="extra_cost" string="Extra Cost"/></group>
+								</group>
+							</page>
+							<page string="Offers">
+								<group>
+									<group>
+										<field name="offer_available"/>
+									</group>
+									<group  attrs="{'invisible': [('offer_available', '=', False)]}" >
+										<field name="offers" widget='radio'/>
+										<field name="base_price"/>
+									</group>
+								</group>
+							</page>
+							<page string="Delivery">
+								<group>
+									<field name="state_group_id" string="State Group"/>
+									<field name="states_id" widget="many2many_tags"/>
+									<!-- <field name="state_id" string="State"/> -->
+									<field name="delivery_time"/>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</xpath>
 		</field>
 	</record>
 </odoo>

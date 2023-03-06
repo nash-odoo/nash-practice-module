@@ -7,4 +7,4 @@ class SportsFactoryBrands(models.Model):
 
     name = fields.Char(required=True)
     description = fields.Text()
-    product_ids = fields.One2many("sports.factory", "brand_type")
+    product_ids = fields.One2many("product.template", "brand_type")
